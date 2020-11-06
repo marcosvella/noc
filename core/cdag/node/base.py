@@ -23,6 +23,7 @@ class Category(str, Enum):
     COMPARE = "compare"
     DEBUG = "debug"
     UTIL = "util"
+    STATISTICS = "statistics"
 
 
 class BaseCDAGNode(object):
@@ -106,10 +107,13 @@ class BaseCDAGNode(object):
 
         :return:
         """
+        if self._activated:
+            return
         self._value = self.get_value()
         # Notify all subscribers
         for cb in self._subscribers:
             cb(self._value)
+        self._activated = True
 
     def subscribe(self, callback: Callable[[ValueType], None]) -> None:
         """

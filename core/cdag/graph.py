@@ -29,7 +29,7 @@ class CDAG(object):
         description: Optional[str] = None,
         config: Optional[Dict[str, Any]] = None,
     ) -> BaseCDAGNode:
-        if node_id in self.state:
+        if node_id in self.nodes:
             raise ValueError("Node %s is already configured" % node_id)
         node_cls = loader.get_class(node_type)
         if not node_cls:

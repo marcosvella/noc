@@ -1,22 +1,23 @@
 # ----------------------------------------------------------------------
-# BaseCDAGFactory
+# StdNode
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2020 The NOC Project
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Third-party modules
+import numpy as np
+
 # NOC modules
-from ..graph import CDAG
+from .mean import MeanNode
 
 
-class BaseCDAGFactory(object):
+class StdNode(MeanNode):
     """
-    CDAG factory is responsible for computation graph construction. Factories can be chained
-    together
+    Calculate standard deviation
     """
 
-    def __init__(self, graph: CDAG):
-        self.graph = graph
+    name = "std"
 
-    def construct(self) -> None:
-        raise NotImplementedError
+    def get_stats(self, values: np.array) -> float:
+        return np.std(values)

@@ -34,6 +34,7 @@ CATEGORIES = {
     Category.COMPARE: {"eq", "ne"},
     Category.DEBUG: {"state"},
     Category.UTIL: {"value"},
+    Category.STATISTICS: {"mean", "std"},
 }
 
 
