@@ -10,7 +10,7 @@ from typing import Optional
 from math import exp
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class ExpNode(BaseCDAGNode):
@@ -20,6 +20,7 @@ class ExpNode(BaseCDAGNode):
 
     name = "exp"
     static_inputs = ["x"]
+    categories = [Category.MATH]
 
     def get_value(self) -> Optional[ValueType]:
         (x,) = self.get_all_inputs()

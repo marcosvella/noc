@@ -12,7 +12,7 @@ from typing import Optional, Dict, Any
 from pydantic import BaseModel
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class ValueNodeConfig(BaseModel):
@@ -27,6 +27,7 @@ class ValueNode(BaseCDAGNode):
     name = "value"
     config_cls = ValueNodeConfig
     dot_shape = "cds"
+    categories = [Category.UTIL]
 
     def __init__(
         self,

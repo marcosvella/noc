@@ -13,7 +13,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class StateNodeState(BaseModel):
@@ -29,6 +29,7 @@ class StateNode(BaseCDAGNode):
     static_inputs = "x"
     state_cls = StateNodeState
     dot_shape = "doubleoctagon"
+    categories = [Category.DEBUG]
 
     def get_value(self) -> Optional[ValueType]:
         value = self.get_input("x")

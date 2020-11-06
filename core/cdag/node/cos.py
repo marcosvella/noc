@@ -10,7 +10,7 @@ from typing import Optional
 from math import cos
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class CosNode(BaseCDAGNode):
@@ -20,6 +20,7 @@ class CosNode(BaseCDAGNode):
 
     name = "cos"
     static_inputs = ["x"]
+    categories = [Category.MATH]
 
     def get_value(self) -> Optional[ValueType]:
         (x,) = self.get_all_inputs()

@@ -9,7 +9,7 @@
 from typing import Optional
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class AbsNode(BaseCDAGNode):
@@ -19,9 +19,10 @@ class AbsNode(BaseCDAGNode):
 
     name = "abs"
     static_inputs = ["x"]
+    categories = [Category.MATH]
 
     def get_value(self) -> Optional[ValueType]:
         (x,) = self.get_all_inputs()
         if x is None:
             return None
-        return x if x >= 0 else -x
+        return abs(x)

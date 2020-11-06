@@ -9,7 +9,7 @@
 from typing import Optional
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class AddNode(BaseCDAGNode):
@@ -19,6 +19,7 @@ class AddNode(BaseCDAGNode):
 
     name = "add"
     static_inputs = ["x", "y"]
+    categories = [Category.OPERATION]
 
     def get_value(self) -> Optional[ValueType]:
         x, y = self.get_all_inputs()

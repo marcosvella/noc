@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------
-# DivNode
+# NENode
 # ----------------------------------------------------------------------
 # Copyright (C) 2007-2020 The NOC Project
 # See LICENSE for details
@@ -8,21 +8,27 @@
 # Python modules
 from typing import Optional
 
+
 # NOC modules
 from .base import BaseCDAGNode, ValueType, Category
+from .eq import CompConfig
 
 
-class DivNode(BaseCDAGNode):
+class NeNode(BaseCDAGNode):
     """
-    Divide `x` by `y`
+    Compare `x` and `y`. Activate with `true_level` if difference is greater than `epsilon`,
+    activate with `false_level` otherwise
     """
 
-    name = "div"
+    name = "eq"
     static_inputs = ["x", "y"]
-    categories = [Category.OPERATION]
+    config_cls = CompConfig
+    categories = [Category.COMPARE]
 
     def get_value(self) -> Optional[ValueType]:
         x, y = self.get_all_inputs()
-        if x is None or not y:
+        if x is None or y is None:
             return None
-        return x / y
+        if abs(x - y) > self.config.epsilon:
+            return self.config.true_level
+        return self.config.false_level

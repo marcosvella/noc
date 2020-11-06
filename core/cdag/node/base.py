@@ -7,11 +7,22 @@
 
 # Python modules
 from typing import Any, Optional, Type, Dict, Union, List, Iterable, Callable, Tuple
+from enum import Enum
 
 # Third-party modules
 from pydantic import BaseModel
 
 ValueType = Union[int, float]
+
+
+class Category(str, Enum):
+    MATH = "math"
+    OPERATION = "operation"
+    LOGICAL = "logical"
+    ACTIVATION = "activation"
+    COMPARE = "compare"
+    DEBUG = "debug"
+    UTIL = "util"
 
 
 class BaseCDAGNode(object):
@@ -20,7 +31,8 @@ class BaseCDAGNode(object):
     config_cls: Type[BaseModel]
     output_config_cls: Type[BaseModel]
     static_inputs: List[str]
-    dot_shape = "box"
+    dot_shape: str = "box"
+    categories: List[Category] = []
 
     def __init__(
         self,

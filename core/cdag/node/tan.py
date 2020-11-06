@@ -10,7 +10,7 @@ from typing import Optional
 from math import tan
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType
+from .base import BaseCDAGNode, ValueType, Category
 
 
 class TanNode(BaseCDAGNode):
@@ -20,6 +20,7 @@ class TanNode(BaseCDAGNode):
 
     name = "tan"
     static_inputs = ["x"]
+    categories = [Category.MATH]
 
     def get_value(self) -> Optional[ValueType]:
         (x,) = self.get_all_inputs()
