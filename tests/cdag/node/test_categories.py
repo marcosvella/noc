@@ -36,6 +36,7 @@ CATEGORIES = {
     Category.UTIL: {"key", "value"},
     Category.STATISTICS: {"mean", "std"},
     Category.ML: {"gauss"},
+    Category.WINDOW: {"expdecay", "nth", "percentile", "sumstep"},
 }
 
 

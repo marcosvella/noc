@@ -53,6 +53,4 @@ def test_to_dot():
         # Apply config
         factory = YAMLCDAGFactory(cdag, CONFIG)
         factory.construct()
-    with open("var/1.dot", "w") as f:
-        f.write(cdag.get_dot())
     assert cdag.get_dot() == DOT

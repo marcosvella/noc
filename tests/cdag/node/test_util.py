@@ -5,9 +5,6 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Python modules
-from math import pi
-
 # Third-party modules
 import pytest
 
