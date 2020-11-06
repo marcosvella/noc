@@ -13,10 +13,24 @@ from noc.core.cdag.node.loader import loader
 from noc.core.cdag.node.base import Category
 
 CATEGORIES = {
-    Category.MATH: {"abs", "acos", "asin", "atan", "cos", "exp", "neg", "sin", "sqrt", "tan"},
+    Category.MATH: {
+        "abs",
+        "acos",
+        "asin",
+        "atan",
+        "cos",
+        "exp",
+        "logistic",
+        "neg",
+        "relu",
+        "softplus",
+        "sin",
+        "sqrt",
+        "tan",
+    },
     Category.OPERATION: {"add", "div", "mul", "sub"},
     Category.LOGICAL: {},
-    Category.ACTIVATION: {},
+    Category.ACTIVATION: {"indicator", "logistic", "relu", "softplus"},
     Category.COMPARE: {"eq", "ne"},
     Category.DEBUG: {"state"},
     Category.UTIL: {"value"},

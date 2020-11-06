@@ -5,9 +5,6 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
-# Third-party modules
-import pytest
-
 # NOC modules
 from noc.core.cdag.graph import CDAG
 from noc.core.cdag.factory.yaml import YAMLCDAGFactory

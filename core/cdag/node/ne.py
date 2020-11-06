@@ -20,7 +20,7 @@ class NeNode(BaseCDAGNode):
     activate with `false_level` otherwise
     """
 
-    name = "eq"
+    name = "ne"
     static_inputs = ["x", "y"]
     config_cls = CompConfig
     categories = [Category.COMPARE]
