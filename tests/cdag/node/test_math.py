@@ -73,7 +73,7 @@ from noc.core.cdag.graph import CDAG
         ("atan", 1.633123935319537e16, pi / 2),
     ],
 )
-def test_fn_node(fn, x, expected):
+def test_math_node(fn, x, expected):
     def cb(x):
         nonlocal _value
         _value = x

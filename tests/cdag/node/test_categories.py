@@ -33,7 +33,7 @@ CATEGORIES = {
     Category.ACTIVATION: {"indicator", "logistic", "relu", "softplus"},
     Category.COMPARE: {"eq", "ne"},
     Category.DEBUG: {"state"},
-    Category.UTIL: {"value"},
+    Category.UTIL: {"key", "value"},
     Category.STATISTICS: {"mean", "std"},
     Category.ML: {"gauss"},
 }
