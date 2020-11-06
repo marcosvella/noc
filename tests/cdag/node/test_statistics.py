@@ -101,7 +101,7 @@ SEQ_NORMAL_0_1 = [
         ),
     ],
 )
-def test_window_node(op, config, measures, expected):
+def test_statistic_node(op, config, measures, expected):
     def cb(x):
         nonlocal _value
         _value = x

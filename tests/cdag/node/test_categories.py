@@ -35,6 +35,7 @@ CATEGORIES = {
     Category.DEBUG: {"state"},
     Category.UTIL: {"value"},
     Category.STATISTICS: {"mean", "std"},
+    Category.ML: {"gauss"},
 }
 
 

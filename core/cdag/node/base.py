@@ -24,6 +24,7 @@ class Category(str, Enum):
     DEBUG = "debug"
     UTIL = "util"
     STATISTICS = "statistics"
+    ML = "ml"
 
 
 class BaseCDAGNode(object):
