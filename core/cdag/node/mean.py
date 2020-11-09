@@ -39,10 +39,7 @@ class MeanNode(BaseCDAGNode):
     def get_stats(self, values: np.array) -> float:
         return np.mean(values)
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         self.state.values.insert(0, float(x))
         # Trim
         if len(self.state.values) >= self.config.max_window:

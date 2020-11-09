@@ -31,8 +31,7 @@ class LogisticNode(BaseCDAGNode):
     config_cls = LogisticConfig
     categories = [Category.MATH, Category.ACTIVATION]
 
-    def get_value(self) -> Optional[ValueType]:
-        (x,) = self.get_all_inputs()
-        if x is None or not self.config.k:
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
+        if not self.config.k:
             return None
         return self.config.L / (1.0 + exp(-self.config.k * x))

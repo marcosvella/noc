@@ -41,10 +41,7 @@ class GaussNode(BaseCDAGNode):
     state_cls = GaussNodeState
     categories = [Category.ML]
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         # Check window is filled
         x = float(x)
         if len(self.state.values) < self.config.min_window:

@@ -36,10 +36,7 @@ class PercentileNode(BaseCDAGNode):
     state_cls = PercentileNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         self.state.values.insert(0, x)
         # Trim
         if len(self.state.values) >= self.config.max_window:

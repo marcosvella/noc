@@ -21,8 +21,7 @@ class DivNode(BaseCDAGNode):
     static_inputs = ["x", "y"]
     categories = [Category.OPERATION]
 
-    def get_value(self) -> Optional[ValueType]:
-        x, y = self.get_all_inputs()
-        if x is None or not y:
+    def get_value(self, x: ValueType, y: ValueType) -> Optional[ValueType]:
+        if not y:
             return None
         return x / y

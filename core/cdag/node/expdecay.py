@@ -39,10 +39,7 @@ class ExpDecayNode(BaseCDAGNode):
     state_cls = ExpDecayNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         t0 = perf_counter_ns()
         self.state.values.insert(0, x)
         self.state.times.insert(0, t0)

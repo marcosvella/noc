@@ -31,8 +31,5 @@ class IndicatorNode(BaseCDAGNode):
     config_cls = IndicatorConfig
     categories = [Category.ACTIVATION]
 
-    def get_value(self) -> Optional[ValueType]:
-        (x,) = self.get_all_inputs()
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         return self.config.true_level if x >= 0 else self.config.false_level

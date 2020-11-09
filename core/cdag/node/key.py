@@ -18,11 +18,10 @@ class KeyNode(BaseCDAGNode):
     """
 
     name = "key"
-    static_inputs = ["key", "in"]
+    static_inputs = ["key", "x"]
     categories = [Category.UTIL]
 
-    def get_value(self) -> Optional[ValueType]:
-        key, inp = self.get_all_inputs()
-        if key is None or inp is None or not key:
+    def get_value(self, key: ValueType, x: ValueType) -> Optional[ValueType]:
+        if not key:
             return None
-        return inp
+        return x

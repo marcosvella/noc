@@ -22,8 +22,7 @@ class SqrtNode(BaseCDAGNode):
     static_inputs = ["x"]
     categories = [Category.MATH]
 
-    def get_value(self) -> Optional[ValueType]:
-        (x,) = self.get_all_inputs()
-        if x is None or x < 0:
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
+        if x < 0:
             return None
         return sqrt(x)

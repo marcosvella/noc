@@ -111,7 +111,7 @@ class BaseCDAGNode(object):
         """
         if self._activated:
             return
-        self._value = self.get_value()
+        self._value = self.get_value(**self._inputs)
         # Notify all subscribers
         for cb in self._subscribers:
             cb(self._value)
@@ -125,7 +125,7 @@ class BaseCDAGNode(object):
         """
         self._subscribers += [callback]
 
-    def get_value(self) -> Optional[ValueType]:
+    def get_value(self, *args, **kwargs) -> Optional[ValueType]:
         """
         Calculate node value. Returns None when input is malformed and should not be propagated
         :return:
@@ -151,16 +151,6 @@ class BaseCDAGNode(object):
         if any(True for v in r if v is None):
             return tuple(None for _ in range(len(r)))
         return r
-
-    def get_all_inputs(self) -> Tuple[Optional[ValueType], ...]:
-        """
-        Return tuple of input values as defined in static_inputs only when all of them are activated.
-        Returns tuple of Nones otherwise
-        :return:
-        """
-        if self.is_activated():
-            return tuple(self._inputs[name] for name in self.static_inputs)
-        return tuple(None for _ in range(len(self.static_inputs)))
 
     def get_state(self) -> Optional[BaseModel]:
         """

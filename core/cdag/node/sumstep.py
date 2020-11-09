@@ -43,10 +43,7 @@ class SumStepNode(BaseCDAGNode):
     state_cls = SumStepNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         self.state.values.append(x)
         # Trim
         if len(self.state.values) >= self.config.max_window:

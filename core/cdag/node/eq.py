@@ -38,10 +38,7 @@ class EqNode(BaseCDAGNode):
     config_cls = CompConfig
     categories = [Category.COMPARE]
 
-    def get_value(self) -> Optional[ValueType]:
-        x, y = self.get_all_inputs()
-        if x is None or y is None:
-            return None
+    def get_value(self, x: ValueType, y: ValueType) -> Optional[ValueType]:
         if abs(x - y) <= self.config.epsilon:
             return self.config.true_level
         return self.config.false_level

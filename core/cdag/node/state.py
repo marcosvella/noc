@@ -30,7 +30,6 @@ class StateNode(BaseCDAGNode):
     dot_shape = "doubleoctagon"
     categories = [Category.DEBUG]
 
-    def get_value(self) -> Optional[ValueType]:
-        value = self.get_input("x")
-        self.state.value = value
-        return value
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
+        self.state.value = x
+        return x

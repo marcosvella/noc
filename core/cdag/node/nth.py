@@ -35,10 +35,7 @@ class NthNode(BaseCDAGNode):
     state_cls = NthNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self) -> Optional[ValueType]:
-        x = self.get_input("x")
-        if x is None:
-            return None
+    def get_value(self, x: ValueType) -> Optional[ValueType]:
         if self.config.n <= 0:
             return x
         # Fill window
