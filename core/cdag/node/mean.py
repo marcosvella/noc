@@ -31,7 +31,6 @@ class MeanNode(BaseCDAGNode):
     """
 
     name = "mean"
-    static_inputs = "x"
     config_cls = MeanNodeConfig
     state_cls = MeanNodeState
     categories = [Category.STATISTICS]

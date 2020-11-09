@@ -19,7 +19,6 @@ class ASinNode(BaseCDAGNode):
     """
 
     name = "asin"
-    static_inputs = ["x"]
     categories = [Category.MATH]
 
     def get_value(self, x: ValueType) -> Optional[ValueType]:

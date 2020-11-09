@@ -21,7 +21,6 @@ class NeNode(BaseCDAGNode):
     """
 
     name = "ne"
-    static_inputs = ["x", "y"]
     config_cls = CompConfig
     categories = [Category.COMPARE]
 

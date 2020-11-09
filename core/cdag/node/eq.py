@@ -34,7 +34,6 @@ class EqNode(BaseCDAGNode):
     """
 
     name = "eq"
-    static_inputs = ["x", "y"]
     config_cls = CompConfig
     categories = [Category.COMPARE]
 

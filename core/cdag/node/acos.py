@@ -19,7 +19,6 @@ class ACosNode(BaseCDAGNode):
     """
 
     name = "acos"
-    static_inputs = ["x"]
     categories = [Category.MATH]
 
     def get_value(self, x: ValueType) -> Optional[ValueType]:

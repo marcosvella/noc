@@ -26,7 +26,6 @@ class SoftPlusNode(BaseCDAGNode):
     """
 
     name = "softplus"
-    static_inputs = ["x"]
     config_cls = SoftPlusConfig
     categories = [Category.MATH, Category.ACTIVATION]
 

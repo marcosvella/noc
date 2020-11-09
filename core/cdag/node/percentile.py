@@ -31,7 +31,6 @@ class PercentileNode(BaseCDAGNode):
     """
 
     name = "percentile"
-    static_inputs = "x"
     config_cls = PercentileNodeConfig
     state_cls = PercentileNodeState
     categories = [Category.WINDOW]

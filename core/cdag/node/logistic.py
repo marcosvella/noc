@@ -27,7 +27,6 @@ class LogisticNode(BaseCDAGNode):
     """
 
     name = "logistic"
-    static_inputs = ["x"]
     config_cls = LogisticConfig
     categories = [Category.MATH, Category.ACTIVATION]
 

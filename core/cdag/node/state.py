@@ -25,7 +25,6 @@ class StateNode(BaseCDAGNode):
     """
 
     name = "state"
-    static_inputs = "x"
     state_cls = StateNodeState
     dot_shape = "doubleoctagon"
     categories = [Category.DEBUG]

@@ -18,7 +18,6 @@ class NegNode(BaseCDAGNode):
     """
 
     name = "neg"
-    static_inputs = ["x"]
     categories = [Category.MATH]
 
     def get_value(self, x: ValueType) -> Optional[ValueType]:

@@ -36,7 +36,6 @@ class GaussNode(BaseCDAGNode):
     """
 
     name = "gauss"
-    static_inputs = "x"
     config_cls = GaussNodeConfig
     state_cls = GaussNodeState
     categories = [Category.ML]

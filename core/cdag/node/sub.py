@@ -18,7 +18,6 @@ class SubNode(BaseCDAGNode):
     """
 
     name = "sub"
-    static_inputs = ["x", "y"]
     categories = [Category.OPERATION]
 
     def get_value(self, x: ValueType, y: ValueType) -> Optional[ValueType]:

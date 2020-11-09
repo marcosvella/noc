@@ -8,6 +8,7 @@
 # Python modules
 from typing import Any, Optional, Type, Dict, Union, List, Iterable, Callable, Tuple
 from enum import Enum
+import inspect
 
 # Third-party modules
 from pydantic import BaseModel
@@ -28,12 +29,20 @@ class Category(str, Enum):
     WINDOW = "window"
 
 
-class BaseCDAGNode(object):
+class BaseCDAGNodeMetaclass(type):
+    def __new__(mcs, name, bases, attrs):
+        n = type.__new__(mcs, name, bases, attrs)
+        sig = inspect.signature(n.get_value)
+        n.static_inputs = [x for x in sig.parameters if x != "self"]
+        return n
+
+
+class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
     name: str
     state_cls: Type[BaseModel]
     config_cls: Type[BaseModel]
     output_config_cls: Type[BaseModel]
-    static_inputs: List[str]
+    static_inputs: List[str]  # Filled by metaclass
     dot_shape: str = "box"
     categories: List[Category] = []
 
@@ -75,8 +84,7 @@ class BaseCDAGNode(object):
         Enumerate all configured inputs
         :return:
         """
-        if hasattr(self, "static_inputs"):
-            yield from self.static_inputs
+        yield from self.static_inputs
 
     def is_activated(self) -> bool:
         """

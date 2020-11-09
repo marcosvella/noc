@@ -38,7 +38,6 @@ class SumStepNode(BaseCDAGNode):
     """
 
     name = "sumstep"
-    static_inputs = "x"
     config_cls = SumStepNodeConfig
     state_cls = SumStepNodeState
     categories = [Category.WINDOW]

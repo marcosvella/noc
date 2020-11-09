@@ -18,7 +18,6 @@ class KeyNode(BaseCDAGNode):
     """
 
     name = "key"
-    static_inputs = ["key", "x"]
     categories = [Category.UTIL]
 
     def get_value(self, key: ValueType, x: ValueType) -> Optional[ValueType]:

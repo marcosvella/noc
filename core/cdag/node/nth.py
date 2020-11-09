@@ -30,7 +30,6 @@ class NthNode(BaseCDAGNode):
     """
 
     name = "nth"
-    static_inputs = "x"
     config_cls = NthNodeConfig
     state_cls = NthNodeState
     categories = [Category.WINDOW]

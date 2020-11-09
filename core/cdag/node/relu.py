@@ -18,7 +18,6 @@ class ReLUNode(BaseCDAGNode):
     """
 
     name = "relu"
-    static_inputs = ["x"]
     categories = [Category.MATH, Category.ACTIVATION]
 
     def get_value(self, x: ValueType) -> Optional[ValueType]:

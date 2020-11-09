@@ -34,7 +34,6 @@ class ExpDecayNode(BaseCDAGNode):
     """
 
     name = "expdecay"
-    static_inputs = "x"
     config_cls = ExpDecayNodeConfig
     state_cls = ExpDecayNodeState
     categories = [Category.WINDOW]

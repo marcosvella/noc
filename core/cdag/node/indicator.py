@@ -27,7 +27,6 @@ class IndicatorNode(BaseCDAGNode):
     """
 
     name = "indicator"
-    static_inputs = ["x"]
     config_cls = IndicatorConfig
     categories = [Category.ACTIVATION]
 
