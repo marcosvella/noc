@@ -39,12 +39,26 @@ class ConfigCDAGFactory(BaseCDAGFactory):
         super().__init__(graph)
         self.config = config
 
+    def requirements_met(self, inputs: Optional[List[InputItem]]):
+        if not inputs:
+            return True
+        for input in inputs:
+            if input.node not in self.graph:
+                return False
+        return True
+
     def construct(self) -> None:
         for item in self.config:
+            # Check for prerequisites
+            if not self.requirements_met(item.inputs):
+                continue
+            # Create node
             node = self.graph.add_node(
                 item.name, node_type=item.type, description=item.description, config=item.config
             )
+            # Connect node
             if item.inputs:
                 for input in item.inputs:
                     r_node = self.graph[input.node]
                     r_node.subscribe(partial(node.activate_input, input.name))
+                    node.mark_as_bound(input.name)

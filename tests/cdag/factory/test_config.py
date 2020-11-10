@@ -41,3 +41,30 @@ def test_config_factory(config, out_state):
                 assert node.description == item.description
     # Compare final state with expected
     assert cdag.get_state() == out_state
+
+
+MISSED_CONFIG = [
+    NodeItem(name="n01", type="value", description="Value of 1", config={"value": 1.0}),
+    NodeItem(
+        name="n02!",
+        type="value",
+        description="Value of 2. Intentionally malformed id",
+        config={"value": 2.0},
+    ),
+    NodeItem(
+        name="n03",
+        type="add",
+        description="Add values",
+        inputs=[InputItem(name="x", node="n01"), InputItem(name="y", node="n02")],
+    ),
+    NodeItem(name="n04", type="state", inputs=[InputItem(name="x", node="n03")]),
+]
+
+
+def test_config_missed_node():
+    with CDAG("test", {}) as cdag:
+        # Apply config
+        factory = ConfigCDAGFactory(cdag, MISSED_CONFIG)
+        factory.construct()
+    nodes = set(cdag.nodes)
+    assert nodes == {"n01", "n02!"}

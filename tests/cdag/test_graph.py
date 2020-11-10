@@ -5,6 +5,9 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Third-party modules
+import pytest
+
 # NOC modules
 from noc.core.cdag.graph import CDAG
 from noc.core.cdag.factory.yaml import YAMLCDAGFactory
@@ -54,3 +57,23 @@ def test_to_dot():
         factory = YAMLCDAGFactory(cdag, CONFIG)
         factory.construct()
     assert cdag.get_dot() == DOT
+
+
+def test_duplicated_node():
+    with CDAG("test", {}) as cdag:
+        cdag.add_node("n01", "none")
+        with pytest.raises(ValueError):
+            cdag.add_node("n01", "none")
+
+
+def test_invalid_node_class():
+    with CDAG("test", {}) as cdag:
+        with pytest.raises(ValueError):
+            cdag.add_node("n01", "none!!!")
+
+
+def test_get_empty_state():
+    with CDAG("test", {}) as cdag:
+        cdag.add_node("n01", "none")
+    state = cdag.get_state()
+    assert state == {}

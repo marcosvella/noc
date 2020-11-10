@@ -28,6 +28,7 @@ from noc.core.cdag.graph import CDAG
         ("logistic", {}, 0.0, 0.5),
         ("logistic", {}, 1, 0.7310585786300049),
         ("logistic", {}, 1.0, 0.7310585786300049),
+        ("logistic", {"k": 0.0}, 0.0, None),
         # ReLU
         ("relu", {}, -1, 0),
         ("relu", {}, -1.0, 0.0),

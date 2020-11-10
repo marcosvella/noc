@@ -18,5 +18,5 @@ class BaseCDAGFactory(object):
     def __init__(self, graph: CDAG):
         self.graph = graph
 
-    def construct(self) -> None:
+    def construct(self) -> None:  # pragma: no cover
         raise NotImplementedError

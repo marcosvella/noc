@@ -14,7 +14,7 @@ from time import time_ns
 from pydantic import BaseModel
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType, Category
+from .base import BaseCDAGNode, ValueType, StrictValueType, Category
 
 NS = 1_000_000_000
 
@@ -26,7 +26,7 @@ class WindowType(str, Enum):
 
 class WindowNodeState(BaseModel):
     timestamps: List[int] = []
-    values: List[ValueType] = []
+    values: List[StrictValueType] = []
 
 
 class WindowConfig(BaseModel):
@@ -43,7 +43,7 @@ class WindowNode(BaseCDAGNode):
 
     def get_window_value(
         self, values: List[ValueType], timestamps: List[int]
-    ) -> Optional[ValueType]:
+    ) -> Optional[ValueType]:  # pragma: no cover
         raise NotImplementedError
 
     def is_filled_ticks(self) -> bool:
@@ -93,7 +93,7 @@ class WindowNode(BaseCDAGNode):
             (is_ticks and not self.is_filled_ticks())
             or (not is_ticks and not self.is_filled_seconds(ts))
         ):
-            return None
+            return self.get_missed_value()
         # Trim window to maximum size
         if is_ticks:
             self.trim_ticks()
@@ -101,3 +101,6 @@ class WindowNode(BaseCDAGNode):
             self.trim_seconds(ts)
         # Calculate value
         return self.get_window_value(self.state.values, self.state.timestamps)
+
+    def get_missed_value(self) -> Optional[ValueType]:
+        return None

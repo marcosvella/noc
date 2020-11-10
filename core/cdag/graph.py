@@ -22,6 +22,9 @@ class CDAG(object):
     def __getitem__(self, item: str) -> BaseCDAGNode:
         return self.nodes[item]
 
+    def __contains__(self, item: str):
+        return item in self.nodes
+
     def add_node(
         self,
         node_id: str,

@@ -6,14 +6,15 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Optional, Type, Dict, Union, List, Iterable, Callable, Tuple
+from typing import Any, Set, Optional, Type, Dict, Union, List, Iterable, Callable, Tuple
 from enum import Enum
 import inspect
 
 # Third-party modules
-from pydantic import BaseModel
+from pydantic import BaseModel, StrictInt, StrictFloat
 
 ValueType = Union[int, float]
+StrictValueType = Union[StrictInt, StrictFloat]
 
 
 class Category(str, Enum):
@@ -58,6 +59,7 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
         self.config = self.clean_config(config)
         self._activated: bool = False
         self._inputs: Dict[str, Optional[ValueType]] = {i: None for i in self.iter_inputs()}
+        self._bound_inputs: Set[str] = set()
         self._to_activate = len(self._inputs)
         self._subscribers: List[Callable[[ValueType], None]] = []
         self._value: Optional[ValueType] = None
@@ -127,7 +129,11 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
         """
         self._subscribers += [callback]
 
-    def get_value(self, *args, **kwargs) -> Optional[ValueType]:
+    def mark_as_bound(self, name: str) -> None:
+        if name in self._inputs:
+            self._bound_inputs.add(name)
+
+    def get_value(self, *args, **kwargs) -> Optional[ValueType]:  # pragma: no cover
         """
         Calculate node value. Returns None when input is malformed and should not be propagated
         :return:
@@ -168,8 +174,8 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
                 or cb.func.__name__ != "activate_input"
                 or not hasattr(cb.func, "__self__")
             ):
-                continue
+                continue  # pragma: no cover
             r_node = cb.func.__self__
             if not isinstance(r_node, BaseCDAGNode):
-                continue
+                continue  # pragma: no cover
             yield r_node, cb.args[0]

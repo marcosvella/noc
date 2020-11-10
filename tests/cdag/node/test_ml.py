@@ -16,17 +16,27 @@ from noc.core.cdag.graph import CDAG
     "op,config,measures,expected",
     [
         # gauss
-        ("gauss", {}, [1.0, 1.0, 1.0, 1.0, 0.2, 1.0], [1.0, 1.0, 1.0, 1.0, 0.0, 1.0]),
         (
             "gauss",
-            {"true_level": 0.0, "false_level": 1.0},
+            {"min_window": 3},
+            [1.0, 1.0, 1.0, 1.0, 0.2, 1.0],
+            [1.0, 1.0, 1.0, 1.0, 0.0, 1.0],
+        ),
+        (
+            "gauss",
+            {"min_window": 3, "true_level": 0.0, "false_level": 1.0},
             [1.0, 1.0, 1.0, 1.0, 0.2, 1.0],
             [0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
         ),
-        ("gauss", {}, [1.0, 1.1, 0.9, 1.1, 0.2, 1.0], [1.0, 1.0, 1.0, 1.0, 0.0, 1.0]),
+        (
+            "gauss",
+            {"min_window": 3},
+            [1.0, 1.1, 0.9, 1.1, 0.2, 1.0],
+            [1.0, 1.0, 1.0, 1.0, 0.0, 1.0],
+        ),
     ],
 )
-def test_statistic_node(op, config, measures, expected):
+def test_ml_node(op, config, measures, expected):
     def cb(x):
         nonlocal _value
         _value = x
