@@ -14,7 +14,7 @@ class NodeLoader(BaseLoader):
     name = "node"
     base_cls = BaseCDAGNode
     base_path = ("core", "cdag", "node")
-    ignored_names = {"base", "loader"}
+    ignored_names = {"base", "loader", "window"}
 
 
 loader = NodeLoader()

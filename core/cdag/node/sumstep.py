@@ -9,15 +9,9 @@
 from typing import Optional, List
 from enum import Enum
 
-# Third-party modules
-from pydantic import BaseModel
-
 # NOC modules
-from .base import BaseCDAGNode, ValueType, Category
-
-
-class SumStepNodeState(BaseModel):
-    values: List[ValueType] = []
+from .base import ValueType, Category
+from .window import WindowNode, WindowConfig
 
 
 class StepDirection(str, Enum):
@@ -26,35 +20,24 @@ class StepDirection(str, Enum):
     ABS = "abs"
 
 
-class SumStepNodeConfig(BaseModel):
+class SumStepNodeConfig(WindowConfig):
     direction: StepDirection = StepDirection.ABS
-    min_window: int = 1
-    max_window: int = 100
 
 
-class SumStepNode(BaseCDAGNode):
+class SumStepNode(WindowNode):
     """
     Calculate sum of increments in the window.
     """
 
     name = "sumstep"
     config_cls = SumStepNodeConfig
-    state_cls = SumStepNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
-        self.state.values.append(x)
-        # Trim
-        if len(self.state.values) >= self.config.max_window:
-            self.state.values = self.state.values[-self.config.max_window :]
-        # Check window is filled
-        lv = len(self.state.values)
-        if lv < self.config.min_window or lv < 2:
-            return None
-        # Process directions
-        window = self.state.values
+    def get_window_value(
+        self, values: List[ValueType], timestamps: List[int]
+    ) -> Optional[ValueType]:
         if self.config.direction == StepDirection.INC:
-            return sum(x1 - x0 for x0, x1 in zip(window, window[1:]) if x1 > x0)
+            return sum(x1 - x0 for x0, x1 in zip(values, values[1:]) if x1 > x0)
         if self.config.direction == StepDirection.DEC:
-            return sum(x0 - x1 for x0, x1 in zip(window, window[1:]) if x1 < x0)
-        return sum(abs(x1 - x0) for x0, x1 in zip(window, window[1:]))
+            return sum(x0 - x1 for x0, x1 in zip(values, values[1:]) if x1 < x0)
+        return sum(abs(x1 - x0) for x0, x1 in zip(values, values[1:]))

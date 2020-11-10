@@ -8,13 +8,14 @@
 # Python modules
 from typing import Optional, List
 from math import exp
-from time import perf_counter_ns
 
 # Third-party modules
 from pydantic import BaseModel
 
 # NOC modules
-from .base import BaseCDAGNode, ValueType, Category
+from .window import WindowNode, WindowConfig
+
+from .base import ValueType, Category
 
 
 class ExpDecayNodeState(BaseModel):
@@ -22,32 +23,22 @@ class ExpDecayNodeState(BaseModel):
     values: List[ValueType] = []
 
 
-class ExpDecayNodeConfig(BaseModel):
+class ExpDecayNodeConfig(WindowConfig):
     k: float = 1.0
-    min_window: int = 1
-    max_window: int = 100
 
 
-class ExpDecayNode(BaseCDAGNode):
+class ExpDecayNode(WindowNode):
     """
     Calculate exponential decay function over window. k - decay factor
     """
 
     name = "expdecay"
     config_cls = ExpDecayNodeConfig
-    state_cls = ExpDecayNodeState
     categories = [Category.WINDOW]
 
-    def get_value(self, x: ValueType) -> Optional[ValueType]:
-        t0 = perf_counter_ns()
-        self.state.values.insert(0, x)
-        self.state.times.insert(0, t0)
-        # Trim
-        if len(self.state.values) >= self.config.max_window:
-            self.state.values = self.state.values[: self.config.max_window]
-            self.state.times = self.state.times[: self.config.max_window]
-        # Check window is filled
-        if len(self.state.values) < self.config.min_window:
-            return None
-        nk = -self.config.k
-        return sum(v * exp(nk * (t0 - ts)) for ts, v in zip(self.state.times, self.state.values))
+    def get_window_value(
+        self, values: List[ValueType], timestamps: List[int]
+    ) -> Optional[ValueType]:
+        t0 = timestamps[-1]
+        nk = self.config.k
+        return sum(v * exp(nk * (t0 - ts)) for ts, v in zip(timestamps, values))

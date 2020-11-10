@@ -41,7 +41,6 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
     name: str
     state_cls: Type[BaseModel]
     config_cls: Type[BaseModel]
-    output_config_cls: Type[BaseModel]
     static_inputs: List[str]  # Filled by metaclass
     dot_shape: str = "box"
     categories: List[Category] = []
@@ -73,11 +72,6 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
         if not hasattr(self, "config_cls"):
             return None
         return self.config_cls(**config)
-
-    def clean_output_config(self, config: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
-        if not hasattr(self, "output_config_cls"):
-            return None
-        return self.output_config_cls(**config)
 
     def iter_inputs(self) -> Iterable[str]:
         """
