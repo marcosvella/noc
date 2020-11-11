@@ -13,7 +13,8 @@ from functools import partial
 from pydantic import BaseModel
 
 # NOC modules
-from .base import BaseCDAGFactory
+from noc.core.matcher import match
+from .base import BaseCDAGFactory, FactoryCtx
 from ..graph import CDAG
 
 
@@ -28,6 +29,7 @@ class NodeItem(BaseModel):
     description: Optional[str]
     config: Optional[Dict[str, Any]]
     inputs: Optional[List[InputItem]]
+    match: Optional[Dict[str, Any]]
 
 
 class ConfigCDAGFactory(BaseCDAGFactory):
@@ -35,8 +37,8 @@ class ConfigCDAGFactory(BaseCDAGFactory):
     Build CDAG from abstract config
     """
 
-    def __init__(self, graph: CDAG, config: List[NodeItem]):
-        super().__init__(graph)
+    def __init__(self, graph: CDAG, config: List[NodeItem], ctx: Optional[FactoryCtx] = None):
+        super().__init__(graph, ctx)
         self.config = config
 
     def requirements_met(self, inputs: Optional[List[InputItem]]):
@@ -47,8 +49,16 @@ class ConfigCDAGFactory(BaseCDAGFactory):
                 return False
         return True
 
+    def is_matched(self, expr: Optional[FactoryCtx]) -> bool:
+        if not expr:
+            return True
+        return match(self.ctx, expr)
+
     def construct(self) -> None:
         for item in self.config:
+            # Check match
+            if not self.is_matched(item.match):
+                continue
             # Check for prerequisites
             if not self.requirements_met(item.inputs):
                 continue

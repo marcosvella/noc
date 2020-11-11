@@ -5,8 +5,13 @@
 # See LICENSE for details
 # ----------------------------------------------------------------------
 
+# Python modules
+from typing import Any, Optional, Dict
+
 # NOC modules
 from ..graph import CDAG
+
+FactoryCtx = Dict[str, Any]
 
 
 class BaseCDAGFactory(object):
@@ -15,8 +20,9 @@ class BaseCDAGFactory(object):
     together
     """
 
-    def __init__(self, graph: CDAG):
+    def __init__(self, graph: CDAG, ctx: Optional[FactoryCtx] = None):
         self.graph = graph
+        self.ctx = ctx
 
     def construct(self) -> None:  # pragma: no cover
         raise NotImplementedError

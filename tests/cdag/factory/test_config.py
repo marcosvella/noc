@@ -68,3 +68,41 @@ def test_config_missed_node():
         factory.construct()
     nodes = set(cdag.nodes)
     assert nodes == {"n01", "n02!"}
+
+
+MATCHERS_CONFIG = [
+    NodeItem(name="n01", type="value", description="Value of 1", config={"value": 1.0}),
+    NodeItem(name="n02", type="value", description="Value of 2", config={"value": 2.0}),
+    NodeItem(
+        name="n03",
+        type="add",
+        description="Add values",
+        inputs=[InputItem(name="x", node="n01"), InputItem(name="y", node="n02")],
+        match={"allow_sum": True},
+    ),
+    NodeItem(
+        name="n04",
+        type="state",
+        inputs=[InputItem(name="x", node="n03")],
+        match={"allow_sum": True, "allow_state": True},
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "ctx,expected_nodes",
+    [
+        ({}, {"n01", "n02"}),
+        ({"allow_sum": False}, {"n01", "n02"}),
+        ({"allow_sum": True}, {"n01", "n02", "n03"}),
+        ({"allow_sum": True, "allow_state": False}, {"n01", "n02", "n03"}),
+        ({"allow_sum": True, "allow_state": True}, {"n01", "n02", "n03", "n04"}),
+    ],
+)
+def test_config_matchers(ctx, expected_nodes):
+    with CDAG("test", {}) as cdag:
+        # Apply config
+        factory = ConfigCDAGFactory(cdag, MATCHERS_CONFIG, ctx=ctx)
+        factory.construct()
+    nodes = set(cdag.nodes)
+    assert nodes == expected_nodes
