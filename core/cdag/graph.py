@@ -31,6 +31,7 @@ class CDAG(object):
         node_type: str,
         description: Optional[str] = None,
         config: Optional[Dict[str, Any]] = None,
+        ctx: Optional[Dict[str, Any]] = None,
     ) -> BaseCDAGNode:
         if node_id in self.nodes:
             raise ValueError("Node %s is already configured" % node_id)
@@ -39,11 +40,14 @@ class CDAG(object):
             raise ValueError("Invalid node type: %s" % node_type)
         config = config or {}
         #
-        node = node_cls(
-            node_id, description=description, state=self.state.get(node_id), config=config
+        return node_cls.construct(
+            self,
+            node_id,
+            description=description,
+            state=self.state.get(node_id),
+            config=config,
+            ctx=ctx,
         )
-        self.nodes[node_id] = node
-        return node
 
     def activate(self):
         """

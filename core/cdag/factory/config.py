@@ -11,6 +11,7 @@ from functools import partial
 
 # Third-party modules
 from pydantic import BaseModel
+from jinja2 import Template
 
 # NOC modules
 from noc.core.matcher import match
@@ -37,15 +38,21 @@ class ConfigCDAGFactory(BaseCDAGFactory):
     Build CDAG from abstract config
     """
 
-    def __init__(self, graph: CDAG, config: List[NodeItem], ctx: Optional[FactoryCtx] = None):
-        super().__init__(graph, ctx)
+    def __init__(
+        self,
+        graph: CDAG,
+        config: List[NodeItem],
+        ctx: Optional[FactoryCtx] = None,
+        namespace: Optional[str] = None,
+    ):
+        super().__init__(graph, ctx, namespace)
         self.config = config
 
     def requirements_met(self, inputs: Optional[List[InputItem]]):
         if not inputs:
             return True
         for input in inputs:
-            if input.node not in self.graph:
+            if self.expand_input(input.node) not in self.graph:
                 return False
         return True
 
@@ -55,20 +62,33 @@ class ConfigCDAGFactory(BaseCDAGFactory):
         return match(self.ctx, expr)
 
     def construct(self) -> None:
+        print("@ construct")
         for item in self.config:
+            print(item)
             # Check match
             if not self.is_matched(item.match):
+                print("not matched")
                 continue
             # Check for prerequisites
             if not self.requirements_met(item.inputs):
+                print("not met")
                 continue
             # Create node
             node = self.graph.add_node(
-                item.name, node_type=item.type, description=item.description, config=item.config
+                self.get_node_id(item.name),
+                node_type=item.type,
+                description=item.description,
+                config=item.config,
+                ctx=self.ctx,
             )
             # Connect node
             if item.inputs:
                 for input in item.inputs:
-                    r_node = self.graph[input.node]
+                    r_node = self.graph[self.expand_input(input.node)]
                     r_node.subscribe(partial(node.activate_input, input.name))
                     node.mark_as_bound(input.name)
+
+    def expand_input(self, name: str) -> str:
+        if "{" in name:
+            name = Template(name).render(**self.ctx)
+        return self.get_node_id(name)

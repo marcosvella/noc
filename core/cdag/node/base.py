@@ -6,15 +6,15 @@
 # ----------------------------------------------------------------------
 
 # Python modules
-from typing import Any, Set, Optional, Type, Dict, Union, List, Iterable, Callable, Tuple
+from typing import Any, Set, Optional, Type, Dict, List, Iterable, Callable, Tuple
 from enum import Enum
 import inspect
 
 # Third-party modules
-from pydantic import BaseModel, StrictInt, StrictFloat
+from pydantic import BaseModel
 
-ValueType = Union[int, float]
-StrictValueType = Union[StrictInt, StrictFloat]
+# NOC modules
+from ..typing import ValueType
 
 
 class Category(str, Enum):
@@ -63,6 +63,24 @@ class BaseCDAGNode(object, metaclass=BaseCDAGNodeMetaclass):
         self._to_activate = len(self._inputs)
         self._subscribers: List[Callable[[ValueType], None]] = []
         self._value: Optional[ValueType] = None
+
+    @classmethod
+    def construct(
+        cls,
+        graph,
+        node_id: str,
+        description: Optional[str],
+        state: Optional[BaseModel],
+        config: Optional[BaseModel],
+        ctx: Optional[Dict[str, Any]],
+    ) -> Optional["BaseCDAGNode"]:
+        """
+        Construct node
+        :return:
+        """
+        node = cls(node_id, description=description, state=state, config=config)
+        graph.nodes[node_id] = node
+        return node
 
     def clean_state(self, state: Optional[Dict[str, Any]]) -> Optional[BaseModel]:
         if not hasattr(self, "state_cls"):

@@ -56,3 +56,55 @@ def test_factory_chain(configs, out_state):
             factory.construct()
     # Compare final state with expected
     assert cdag.get_state() == out_state
+
+
+NS_CONFIG1 = """
+- name: n01
+  description: Value of 1
+  type: value
+  config:
+    value: 1.0
+- name: n02
+  type: value
+  description: Value of 2
+  config:
+    value: 2.0
+"""
+NS_CONFIG2 = """
+- name: n03
+  type: add
+  description: Add values
+  inputs:
+  - name: x
+    node: ns1::n01
+  - name: y
+    node: ns1::n02
+"""
+NS_CONFIG3 = """
+- name: n04
+  type: state
+  inputs:
+  - name: x
+    node: "{{src}}"
+"""
+
+
+@pytest.mark.parametrize(
+    "ctx,configs,out_state",
+    [
+        (
+            {"src": "ns2::n03"},
+            [("ns1", NS_CONFIG1), ("ns2", NS_CONFIG2), ("ns3", NS_CONFIG3)],
+            {"ns3::n04": {"value": 3.0}},
+        )
+    ],
+)
+def test_factory_ns_chain(ctx, configs, out_state):
+    # Empty graph with no state
+    with CDAG("test", {}) as cdag:
+        # Apply config
+        for ns, cfg in configs:
+            factory = YAMLCDAGFactory(cdag, cfg, ctx, ns)
+            factory.construct()
+    # Compare final state with expected
+    assert cdag.get_state() == out_state

@@ -17,6 +17,12 @@ from .config import ConfigCDAGFactory, NodeItem, FactoryCtx
 
 
 class JSONCDAGFactory(ConfigCDAGFactory):
-    def __init__(self, graph: CDAG, config: str, cfx: Optional[FactoryCtx] = None):
+    def __init__(
+        self,
+        graph: CDAG,
+        config: str,
+        cfx: Optional[FactoryCtx] = None,
+        namespace: Optional[str] = None,
+    ):
         items = [NodeItem(**i) for i in orjson.loads(config)]
-        super().__init__(graph, items, cfx)
+        super().__init__(graph, items, cfx, namespace)

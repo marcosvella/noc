@@ -17,6 +17,12 @@ from .config import ConfigCDAGFactory, NodeItem, FactoryCtx
 
 
 class YAMLCDAGFactory(ConfigCDAGFactory):
-    def __init__(self, graph: CDAG, config: str, ctx: Optional[FactoryCtx] = None):
+    def __init__(
+        self,
+        graph: CDAG,
+        config: str,
+        ctx: Optional[FactoryCtx] = None,
+        namespace: Optional[str] = None,
+    ):
         items = [NodeItem(**i) for i in yaml.safe_load(config)]
-        super().__init__(graph, items, ctx)
+        super().__init__(graph, items, ctx, namespace)
