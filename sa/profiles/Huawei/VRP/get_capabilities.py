@@ -154,8 +154,15 @@ class Script(BaseScript):
         r = []
         if self.has_snmp():
             try:
-                self.snmp.getnext("1.3.6.1.4.1.2011.5.25.31.1.1.1.1", bulk=False, only_first=True)
+                self.snmp.getnext(
+                    mib["HUAWEI-ENTITY-EXTENT-MIB::hwEntityStateEntry"], bulk=False, only_first=True
+                )
                 r += ["Huawei | MIB | ENTITY-EXTENT-MIB"]
+            except (self.snmp.SNMPError, self.snmp.TimeOutError):
+                pass
+            try:
+                self.snmp.get(mib["HUAWEI-CBQOS-MIB::hwCBQoSClassifierIndexNext", 0])
+                r += ["Huawei | MIB | HUAWEI-CBQOS-MIB"]
             except (self.snmp.SNMPError, self.snmp.TimeOutError):
                 pass
         return r

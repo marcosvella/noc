@@ -190,7 +190,24 @@ class Script(BaseScript):
         v = self.cli("show vrrp detail")
         return bool(v)
 
+    def has_mibs(self):
+        r = []
+        if self.has_snmp():
+            try:
+                self.snmp.getnext(
+                    mib["CISCO-CLASS-BASED-QOS-MIB::cbQosIFPolicyIndex", 0],
+                    bulk=True,
+                    only_first=True,
+                )
+                r += ["Cisco | MIB | CISCO-CLASS-BASED-QOS-MIB"]
+            except (self.snmp.SNMPError, self.snmp.TimeOutError):
+                pass
+        return r
+
     def execute_platform_cli(self, caps):
+        hm = self.has_mibs()
+        for m in hm:
+            caps[m] = True
         # Check IP SLA status
         sla_v = self.get_syntax_variant(self.SYNTAX_IP_SLA_APPLICATION)
         if sla_v is not None:
@@ -207,7 +224,10 @@ class Script(BaseScript):
 
     def execute_platform_snmp(self, caps):
         # Check IP SLA status
-        sla_v = self.snmp.get("1.3.6.1.4.1.9.9.42.1.1.10.0")
+        hm = self.has_mibs()
+        for m in hm:
+            caps[m] = True
+        sla_v = self.snmp.get(mib["CISCO-RTTMON-MIB::rttMonApplProbeCapacity", 0])
         if sla_v:
             # IP SLA responder
             if self.has_ip_sla_responder_snmp():
