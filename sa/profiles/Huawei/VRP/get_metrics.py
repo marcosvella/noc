@@ -68,10 +68,13 @@ class Script(GetMetricsScript):
         [
             "Interface | CBQOS | Drops | In | Delta",
             "Interface | CBQOS | Drops | Out | Delta",
+            "Interface | CBQOS | Octets | In",
             "Interface | CBQOS | Octets | In | Delta",
+            "Interface | CBQOS | Octets | Out",
             "Interface | CBQOS | Octets | Out | Delta",
         ],
         volatile=False,
+        has_capability="Huawei | OID | hwCBQoSClassifierStatisticsTable",
         access="S",  # CLI version
     )
     def get_ip_sla_udp_jitter_metrics_snmp(self, metrics):
@@ -94,7 +97,10 @@ class Script(GetMetricsScript):
             for metric, value in [
                 (f"Interface | CBQOS | Drops | {direction_map[direction]} | Delta", discards),
                 (f"Interface | CBQOS | Octets | {direction_map[direction]} | Delta", bytes),
-                (f"Interface | CBQOS | Packets | {direction_map[direction]} | Delta", packets)]:
+                (f"Interface | CBQOS | Octets | {direction_map[direction]}", bytes),
+                (f"Interface | CBQOS | Packets | {direction_map[direction]} | Delta", packets),
+                (f"Interface | CBQOS | Packets | {direction_map[direction]}", packets)
+            ]:
                 scale = 1
                 self.set_metric(
                     id=(metric, ifaces[ifindex]),

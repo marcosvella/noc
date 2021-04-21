@@ -24,6 +24,12 @@ class Script(BaseScript):
         "BRAS | PPTP": mib["CISCO-VPDN-MGMT-MIB::cvpdnSystemTunnelTotal", 3],
     }
 
+    CHECK_SNMP_GETNEXT = {
+        "Cisco | MIB | CISCO-CLASS-BASED-QOS-MIB": mib[
+            "CISCO-CLASS-BASED-QOS-MIB::cbQosIFPolicyIndex", 0
+        ]
+    }
+
     CAP_SLA_SYNTAX = "Cisco | IOS | Syntax | IP SLA"
 
     SYNTAX_IP_SLA_APPLICATION = ["show ip sla application", "show ip sla monitor application"]
@@ -190,24 +196,7 @@ class Script(BaseScript):
         v = self.cli("show vrrp detail")
         return bool(v)
 
-    def has_mibs(self):
-        r = []
-        if self.has_snmp():
-            try:
-                self.snmp.getnext(
-                    mib["CISCO-CLASS-BASED-QOS-MIB::cbQosIFPolicyIndex", 0],
-                    bulk=True,
-                    only_first=True,
-                )
-                r += ["Cisco | MIB | CISCO-CLASS-BASED-QOS-MIB"]
-            except (self.snmp.SNMPError, self.snmp.TimeOutError):
-                pass
-        return r
-
     def execute_platform_cli(self, caps):
-        hm = self.has_mibs()
-        for m in hm:
-            caps[m] = True
         # Check IP SLA status
         sla_v = self.get_syntax_variant(self.SYNTAX_IP_SLA_APPLICATION)
         if sla_v is not None:
@@ -223,10 +212,6 @@ class Script(BaseScript):
                 caps["Cisco | IP | SLA | Probes"] = np
 
     def execute_platform_snmp(self, caps):
-        # Check IP SLA status
-        hm = self.has_mibs()
-        for m in hm:
-            caps[m] = True
         sla_v = self.snmp.get(mib["CISCO-RTTMON-MIB::rttMonApplProbeCapacity", 0])
         if sla_v:
             # IP SLA responder
