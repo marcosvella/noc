@@ -99,7 +99,7 @@ class Script(GetMetricsScript):
                 (f"Interface | CBQOS | Octets | {direction_map[direction]} | Delta", bytes),
                 (f"Interface | CBQOS | Octets | {direction_map[direction]}", bytes),
                 (f"Interface | CBQOS | Packets | {direction_map[direction]} | Delta", packets),
-                (f"Interface | CBQOS | Packets | {direction_map[direction]}", packets)
+                (f"Interface | CBQOS | Packets | {direction_map[direction]}", packets),
             ]:
                 scale = 1
                 self.set_metric(
@@ -107,7 +107,7 @@ class Script(GetMetricsScript):
                     metric=metric,
                     value=float(value),
                     ts=ts,
-                    labels=ifaces[ifindex] + [f'noc::traffic_class::{class_map[classifier]}'],
+                    labels=ifaces[ifindex] + [f"noc::traffic_class::{class_map[classifier]}"],
                     multi=True,
                     type="delta" if metric.endswith("Delta") else "gauge",
                     scale=scale,
