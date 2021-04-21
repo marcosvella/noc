@@ -410,7 +410,7 @@ class BaseService(object):
         await self.init_api()
         #
         if config.message.enable_metrics:
-            self.mx_partitions = await self.get_stream_partitions("mx")
+            self.mx_partitions = await self.get_stream_partitions("message")
         #
         if self.use_telemetry:
             self.start_telemetry_callback()
@@ -948,7 +948,9 @@ class BaseService(object):
             not self.mx_metrics_scopes or table in self.mx_metrics_scopes
         ):
             self.mx_metrics_queue.put(
-                stream="mx", partition=key % self.mx_partitions, data=[q_mx(m) for m in metrics]
+                stream="message",
+                partition=key % self.mx_partitions,
+                data=[q_mx(m) for m in metrics],
             )
 
     def start_telemetry_callback(self) -> None:
