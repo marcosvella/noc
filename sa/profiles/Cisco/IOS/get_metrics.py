@@ -276,7 +276,7 @@ class Script(GetMetricsScript):
         volatile=False,
         access="S",  # CLI version
     )
-    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics):
+    def get_interface_cbqos_metrics_snmp(self, metrics):
         print(metrics)
         ifaces = {m.ifindex: m.labels for m in metrics if m.ifindex}
         config = self.get_cbqos_config_snmp()

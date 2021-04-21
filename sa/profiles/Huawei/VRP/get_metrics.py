@@ -77,7 +77,7 @@ class Script(GetMetricsScript):
         has_capability="Huawei | OID | hwCBQoSClassifierStatisticsTable",
         access="S",  # CLI version
     )
-    def get_ip_sla_udp_jitter_metrics_snmp(self, metrics):
+    def get_interface_cbqos_metrics_snmp(self, metrics):
         ifaces = {m.ifindex: m.labels for m in metrics if m.ifindex}
         direction_map = {1: "In", 2: "Out"}
         class_map = {}
