@@ -66,7 +66,6 @@ class LabelApplication(ExtDocApplication):
     def api_labels_lookup_tree(self, request):
         leafs = defaultdict(list)
         level = 1
-        wildcards = {}
         labels_filter = {}
         query = request.GET.get("__query")
         if query:
@@ -78,9 +77,9 @@ class LabelApplication(ExtDocApplication):
                 continue
             path = ll.name.split("::")
             if ll.is_matched:
-                parent =  "::".join(path[:-level - 1])
+                parent = "::".join(path[: -level - 1])
             else:
-                parent =  "::".join(path[:-level])
+                parent = "::".join(path[:-level])
 
             leafs[parent].append(
                 {
@@ -93,6 +92,6 @@ class LabelApplication(ExtDocApplication):
                 }
             )
 
-        return self.render_json({
-            "text": "root", "children": [{"text": lf, "children": leafs[lf]} for lf in leafs]
-        })
+        return self.render_json(
+            {"text": "root", "children": [{"text": lf, "children": leafs[lf]} for lf in leafs]}
+        )
